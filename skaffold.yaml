@@ -1,0 +1,24 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  # 로컬
+  local:
+    # 이미지 빌드 후 docker hub push하지 않기
+    push: false
+  # googleCloudBuild:
+  #  projectId: ticketingd-dev
+  artifacts:
+    # 로컬
+    - image: limkevin1313/auth
+    # - image: us.gcr.io/ticketingd-dev/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
