@@ -21,16 +21,29 @@ interface UserDoc extends mongoose.Document {
   //   updatedAt: string;
 }
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
+  {
+    // password, __v 출력 제거 ~ 타 db와 호환 될 수 있도록 일관된 id 반환
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      },
+    },
   },
-});
+);
 
 userSchema.pre('save', async function (done) {
   if (this.isModified('password')) {
