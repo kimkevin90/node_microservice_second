@@ -8,12 +8,7 @@ import { CustomError } from '../errors/custom-error';
     }[]
 }
 */
-export const errorHandler = (
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   /*
   // Custeom Error 전환 전
   if (err instanceof RequestValidationError) {
@@ -30,11 +25,9 @@ export const errorHandler = (
   */
 
   if (err instanceof CustomError) {
-    console.error(err);
+    // console.error(err);
     return res.status(err.statusCode).send({ errors: err.serializeErrors() });
   }
 
-  res
-    .status(400)
-    .send({ errors: [{ message: '어딘가 오류났는데 모르겠어..' }] });
+  res.status(400).send({ errors: [{ message: '어딘가 오류났는데 모르겠어..' }] });
 };

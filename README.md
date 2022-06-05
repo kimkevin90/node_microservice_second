@@ -43,3 +43,11 @@
 ## 3) JWT_SECRET_KEY POD 공유할 수 있도록 환경 변수 적용
 - kubectl create secret generic jwt-secret --from-literal=jwt=jwtsecretkey
 - Deployment manifest file에 env 적용
+
+## 4) cookie-session 사용 후, cookie에 JWT 토큰 적용
+- next.js 초기 랜더링을 위해 authorization & body token 사용 배제
+
+# 4. 테스팅
+- 서비스 단위로 테스팅 진행 (단위, route, DB 포함) ~ 타 서비스까지 포함하는
+테스트는 현실적으로 매우 복잡함
+- jest & inMemoryMongoServer 사용
