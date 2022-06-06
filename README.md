@@ -56,3 +56,8 @@
 - 미들웨어 & 에러처리 common 모듈로 분리
 - npm update common모듈명 --save
 - k exec -it POD명 sh ~ 패키지 확인
+
+# 6. ticket 서비스 생성
+- ticket 서비스 deploy & Service 생성
+- ticket 서비스 mongo db 생성 및 URI 환경 변수 적용
+- ticket 생성 & 조회 test / api 생성
