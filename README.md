@@ -61,3 +61,5 @@
 - ticket 서비스 deploy & Service 생성
 - ticket 서비스 mongo db 생성 및 URI 환경 변수 적용
 - ticket 생성 & 조회 test / api 생성
+- ticket 업데이트 test / api 생성
+- ingress-controller ticket path 등록
