@@ -36,7 +36,8 @@ afterAll(async () => {
 
 global.signin = () => {
   const payload = {
-    id: 'askfjkadk',
+    // signin 두개 들어가는 테스트에서 각기다른 사용자로 페이크 처리
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com',
   };
 
