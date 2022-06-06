@@ -51,3 +51,8 @@
 - 서비스 단위로 테스팅 진행 (단위, route, DB 포함) ~ 타 서비스까지 포함하는
 테스트는 현실적으로 매우 복잡함
 - jest & inMemoryMongoServer 사용
+
+# 5. common 모듈 분리
+- 미들웨어 & 에러처리 common 모듈로 분리
+- npm update common모듈명 --save
+- k exec -it POD명 sh ~ 패키지 확인
