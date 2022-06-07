@@ -13,6 +13,7 @@ stan.on('connect', async () => {
 
   const publisher = new TicketCreatedPublisher(stan);
 
+  // Publisher class 메소드 publish에 promise 적용했으므로 error 체크
   try {
     await publisher.publish({
       id: '123',

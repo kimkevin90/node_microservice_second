@@ -13,6 +13,9 @@ export class TicketCreatedListener extends Listenr<TicketCreatedEvent> {
   onMessage(data: TicketCreatedEvent['data'], msg: Message) {
     console.log('Event Data!', data);
     // data : any로 할경우 property 검증 어려움
+    // 인터페이스 사용할 수 있지만 TicketCreatedEvent를 통해 확실한 data에 대한 정의 가능
+    // 예를 들어 인터페이스 잘못된 property 기입할 수 있다.
+    // console.log(data.test) 오류 발생
     msg.ack();
   }
 }
