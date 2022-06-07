@@ -1,8 +1,16 @@
 import { Message, Stan } from 'node-nats-streaming';
-export abstract class Listenr {
-  abstract subject: string;
+import { Subjects } from './subject';
+
+interface Event {
+  subject: Subjects;
+  data: any;
+}
+
+// 제네릭사용을 통해 최종결과가 해당 타입 적용해야한다?
+export abstract class Listenr<T extends Event> {
+  abstract subject: T['subject'];
   abstract queueGroupName: string;
-  abstract onMessage(data: any, msg: Message): void;
+  abstract onMessage(data: T['data'], msg: Message): void;
   private client: Stan;
   protected ackWait = 5 * 1000;
 
