@@ -63,3 +63,8 @@
 - ticket 생성 & 조회 test / api 생성
 - ticket 업데이트 test / api 생성
 - ingress-controller ticket path 등록
+
+# 6. Event Bus 생성
+- Nats Streaming Server 사용
+- Publisher 연결은 복잡한 incress-controller 설정이 아닌 포트포워딩으로 진행
+k port-forward nats-depl-5d675c99c4-t2g8h 4222(로컬에서 접속하는 PORT):4222(POD에 진입하는 PORT)
