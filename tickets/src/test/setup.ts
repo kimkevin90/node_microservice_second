@@ -9,9 +9,13 @@ declare global {
   var signin: () => string[];
 }
 
+jest.mock('../nats-wrapper');
+
 let mongo: any;
 // 테스트 실행 전 설정
 beforeAll(async () => {
+  // jset mockImplementation 초기화
+  jest.clearAllMocks();
   process.env.JWT_KEY = 'asdfasdf';
 
   mongo = await MongoMemoryServer.create();
