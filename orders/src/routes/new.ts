@@ -10,7 +10,7 @@ import {
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
 import { Order } from '../models/order';
-import { OrderCreatedPublisher } from '../events/order-created-publishers';
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publishers';
 import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
