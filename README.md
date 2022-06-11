@@ -84,3 +84,16 @@ k port-forward nats-depl-5d675c99c4-t2g8h 4222(로컬에서 접속하는 PORT):4
 ### 3-2) 해결방법
 - 결국은 비동기 이벤트 발생으로 인한 문제 해결은 이벤트 emit 하는 서비스에서 이벤트에 대한 명세를 해야한다.
 - 예를들어 이벤트 emit 시 이벤트에 대한 시퀀스 정보도 같이 전달
+
+# 7. Ticket & Order Service 생성
+### order:created 이벤트 발생 시
+- 해당 티켓에 대한 수정은 불가
+- payment service에 새로운 order:created 이벤트 전달
+- expiration service에 order:created 이벤트 전달
+
+### order:cancelled 이벤트 발생 시
+- 해당 티켓 수정 가능
+- order 취소시 payment service에서는 이를 reject
+
+### 기타
+- ticket 서비스의 모델을 order sevice에 특정 프로퍼티만 복제하는 이유는 order service와 ticket service의 종속성을 분리시킨다.
