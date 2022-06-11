@@ -25,6 +25,14 @@ spec:
                 name: tickets-srv
                 port:
                   number: 3000
+          - path: /api/orders/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: orders-srv
+                port:
+                  number: 3000
+          # 클라이언트 마지막! 
           - path: /?(.*)
             pathType: Prefix
             backend:
