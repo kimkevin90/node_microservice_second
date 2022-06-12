@@ -90,7 +90,7 @@ k port-forward nats-depl-5d675c99c4-t2g8h 4222(로컬에서 접속하는 PORT):4
 ### order:created 이벤트 발생 시
 - 해당 티켓에 대한 수정은 불가
 - ticket service에 새로운 order:created 이벤트 전달하고 orderId 저장
-- payment service에 새로운 order:created 이벤트 전달
+- ticket service는 orderId 저장 후 update version 동기화를 위해 티켓 update 이벤트 emit
 - expiration service에 order:created 이벤트 전달
 
 ### order:cancelled 이벤트 발생 시
@@ -99,3 +99,10 @@ k port-forward nats-depl-5d675c99c4-t2g8h 4222(로컬에서 접속하는 PORT):4
 
 ### 기타
 - ticket 서비스의 모델을 order sevice에 특정 프로퍼티만 복제하는 이유는 order service와 ticket service의 종속성을 분리시킨다.
+
+# 8. Expiration Service 생성
+
+### Order Expiration time 측정
+- setTimeOut은 메모리에 저장되므로 서비스 다운 시 데이터 손실 발생
+- 스케쥴링 지원하는 event bus를 통해 15분 후 메세지 전송
+- bull js의 스케쥴링 이용해 알림을 redis에 저장 후 bull js에서 15분후 만료 이벤트 emit
