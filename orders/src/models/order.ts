@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { OrderStatus } from '@jsk8stickets/common';
 import { TicketDoc } from './ticket';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 // odrder / payment / ticket 서비스 모두 정확한 상태를 공유위해 enum 처리
 export { OrderStatus };
@@ -52,6 +53,9 @@ const orderSchema = new mongoose.Schema(
     },
   },
 );
+
+orderSchema.set('versionKey', 'version');
+orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs);
