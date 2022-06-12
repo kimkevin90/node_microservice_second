@@ -12,8 +12,6 @@ jest.mock('../nats-wrapper');
 let mongo: any;
 // 테스트 실행 전 설정
 beforeAll(async () => {
-  // jset mockImplementation 초기화
-  jest.clearAllMocks();
   process.env.JWT_KEY = 'asdfasdf';
 
   mongo = await MongoMemoryServer.create();
@@ -24,6 +22,8 @@ beforeAll(async () => {
 
 // 각 테스트 실행 전
 beforeEach(async () => {
+  // jset mockImplementation 초기화
+  jest.clearAllMocks();
   const collections = await mongoose.connection.db.collections();
   // 데이터 삭제
   for (let collection of collections) {

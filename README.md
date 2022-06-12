@@ -14,6 +14,7 @@
 
 - (1) skaffold & deploy yaml 업데이트
 - (2) Ingress-nginx 및 GCE-GKE 설치 (https://kubernetes.github.io/ingress-nginx/deploy/)
+-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/cloud/deploy.yaml
 - (3) Ingress 설치 시, 로드밸런서 자동 생성되며 /etc/hosts에 해당 로드밸런서 IP 주소 반영
 - (4) skaffold dev 실행 시 Cloud Build 확인 가능
 
@@ -87,15 +88,33 @@ k port-forward nats-depl-5d675c99c4-t2g8h 4222(로컬에서 접속하는 PORT):4
 - 변경(update) 이벤트 병렬로 emit 시, 버전 정보를 +1 해서 제공하여 처리하는 곳에서 버전 순서에 따라 처리한다.
 
 # 7. Ticket & Order Service 생성
+### ticket:created & ticket:update 이벤트 발생 시
+- order sevice는 위 이벤트를 리스닝 후 order service의 ticket 테이블에 데이터 저장
+
 ### order:created 이벤트 발생 시
 - 해당 티켓에 대한 수정은 불가
 - ticket service에 새로운 order:created 이벤트 전달하고 orderId 저장
-- payment service에 새로운 order:created 이벤트 전달
+- ticket service는 orderId 저장 후 update version 동기화를 위해 티켓 ticket:update 이벤트 emit 
 - expiration service에 order:created 이벤트 전달
 
 ### order:cancelled 이벤트 발생 시
 - 해당 티켓 수정 가능
+- ticket service에 새로운 order:cancelled 이벤트 전달하고 orderId undefined 저장
+- ticket service는 update version 동기화를 위해 티켓 ticket:update 이벤트 emit
 - order 취소시 payment service에서는 이를 reject
 
 ### 기타
 - ticket 서비스의 모델을 order sevice에 특정 프로퍼티만 복제하는 이유는 order service와 ticket service의 종속성을 분리시킨다.
+
+# 8. Expiration Service 생성
+- order:created 이벤트 리스닝 후 15분 대기 후 expirationcomplete 이벤트 emit
+
+### Order Expiration time 측정
+- setTimeOut은 메모리에 저장되므로 서비스 다운 시 데이터 손실 발생
+- 스케쥴링 지원하는 event bus를 통해 15분 후 메세지 전송
+- bull js의 스케쥴링 이용해 알림을 redis에 저장 후 bull js에서 15분후 만료 이벤트 emit
+
+### Bull js 사용
+- queue 생성 후 job(orderId) 및 deley를 포함하여 deley 후에 redis에 전달
+- 만기 시간 지난 후 expiration:complete 이벤트 emit
+- order service는 expiration:complete 리스닝 후 , order:cancelled 이벤트 emit
