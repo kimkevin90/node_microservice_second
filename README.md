@@ -118,3 +118,14 @@ k port-forward nats-depl-5d675c99c4-t2g8h 4222(로컬에서 접속하는 PORT):4
 - queue 생성 후 job(orderId) 및 deley를 포함하여 deley 후에 redis에 전달
 - 만기 시간 지난 후 expiration:complete 이벤트 emit
 - order service는 expiration:complete 리스닝 후 , order:cancelled 이벤트 emit
+
+# 9. Payment Service 생성
+- Order serviced와 종속성 분리를 위해 order 모델 생성 후 일부 데이터 저장
+### order:created 이벤트 수신 시
+- order 정보 중 payment service에 필요한 일부 정보 저장
+
+### order:cancelled 이벤트 수신 시
+- 순차적으로 처리를 위해 verseion -1 조회 후 status 업데이트
+
+### charge:created 이벤트 발생 시
+- order service에서 이벤트 리스닝
