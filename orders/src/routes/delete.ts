@@ -6,7 +6,7 @@ import {
 } from '@jsk8stickets/common';
 import { Order, OrderStatus } from '../models/order';
 import { natsWrapper } from '../nats-wrapper';
-import { OrderCancelledPublisher } from '../events/order-cancelled-publisher';
+import { OrderCancelledPublisher } from '../events/publishers/order-cancelled-publisher';
 
 const router = express.Router();
 
@@ -29,9 +29,9 @@ router.delete(
 
     new OrderCancelledPublisher(natsWrapper.client).publish({
       id: order.id,
+      version: order.version,
       ticket: {
         id: order.ticket.id,
-        price: order.ticket.price,
       },
     });
 
