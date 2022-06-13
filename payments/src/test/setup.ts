@@ -1,8 +1,6 @@
-import request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import { app } from '../app';
 
 // 테스트 시, cookie 얻기 위해 사용
 declare global {
@@ -10,6 +8,9 @@ declare global {
 }
 
 jest.mock('../nats-wrapper');
+
+process.env.STRIPE_KEY =
+  'sk_test_51L9roHDuEyEVJfBVXqVxaRXkow23K237KUI2u7HsteSoQHO9SqRGYCRUs1njYjRnl9MJLOUPFuGHHqdKtPKayVob00KeIfHWld';
 
 let mongo: any;
 // 테스트 실행 전 설정
@@ -34,8 +35,8 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await mongo.stop();
   await mongoose.connection.close();
+  await mongo.stop();
 });
 
 global.signin = (id?: string) => {
