@@ -1,11 +1,9 @@
 import mongoose from 'mongoose';
 
 import { app } from './app';
-import { ExpirationCompleteListener } from './events/listeners/expiration-complete-listener';
-import { PaymentCreatedListener } from './events/listeners/payment-created-listener';
-import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
-import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener';
 import { natsWrapper } from './nats-wrapper';
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
 
 const startApp = async () => {
   if (!process.env.JWT_KEY) {
@@ -41,19 +39,17 @@ const startApp = async () => {
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
 
-    new TicketCreatedListener(natsWrapper.client).listen();
-    new TicketUpdatedListener(natsWrapper.client).listen();
-    new ExpirationCompleteListener(natsWrapper.client).listen();
-    new PaymentCreatedListener(natsWrapper.client).listen();
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI);
-    console.log('Connected to MongoDB For OrderService');
+    console.log('Connected to MongoDB For PaymentService');
   } catch (err) {
     console.error(err);
   }
 
   app.listen(3000, () => {
-    console.log('Listening 3000 PORT3!!');
+    console.log('Listening 3000 PORT3 For PaymentService');
   });
 };
 

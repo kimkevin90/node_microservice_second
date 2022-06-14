@@ -19,7 +19,7 @@ const startApp = async () => {
   }
 
   app.listen(3000, () => {
-    console.log('Listening 3000 PORT3!!');
+    console.log('Listening 3000 PORT3 For Auth Service');
   });
 };
 
