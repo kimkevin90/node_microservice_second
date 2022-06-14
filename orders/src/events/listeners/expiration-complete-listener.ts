@@ -20,6 +20,10 @@ export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent
       throw new Error('Order not found');
     }
 
+    if (order.status === OrderStatus.Complete) {
+      return msg.ack();
+    }
+
     // isReserved 조건에 Cancelled없으므로 따로 ticket: null 적용안해도 reserved 풀림
     order.set({
       status: OrderStatus.Cancelled,

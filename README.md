@@ -128,7 +128,7 @@ k port-forward nats-depl-5d675c99c4-t2g8h 4222(로컬에서 접속하는 PORT):4
 - 순차적으로 처리를 위해 verseion -1 조회 후 status 업데이트
 
 ### charge:created 이벤트 발생 시
-- order service에서 이벤트 리스닝
+- order service에서 이벤트 리스닝 후 order status complete으로 어데이트
 
 
 ### 기타
